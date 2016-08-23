@@ -26,7 +26,7 @@ public class Stream {
         response.setHeader("Connection", "keep-alive");
         AsyncRequest asyncRequest = new AsyncRequest(context);
 
-        camera = Camera.getCameraInstance(repository, "photo-panda.jpeg", rotation / 90,maxFPS, (frame) -> {
+        camera = Camera.getCameraInstance(repository, imageId, rotation / 90,maxFPS, (frame) -> {
             try {
                 // camera.setRotation((this.rotation += 90) % 360);
                 System.out.println("frame size:" + frame.length);
