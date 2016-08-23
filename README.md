@@ -8,7 +8,7 @@ mvn clean package
 
 #Running
 
-java -jar mjpeg-streamer-1.0-SNAPSHOT-jar-with-dependencies.jar <directory with images>
+java -jar mjpeg-streamer-1.0-SNAPSHOT-jar-with-dependencies.jar `<directory with images>`
 
 Instantiates Jetty Embedded server on port 8080 with application context "camock"
 
