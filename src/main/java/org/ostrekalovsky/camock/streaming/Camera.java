@@ -78,7 +78,9 @@ public class Camera {
         System.out.println("Stop the camera:" + this);
         executorService.shutdown();
         try {
-            executorService.awaitTermination(1, TimeUnit.SECONDS);
+            if (!executorService.awaitTermination(1, TimeUnit.SECONDS)){
+                executorService.shutdownNow();
+            }
         } catch (InterruptedException e) {
             executorService.shutdownNow();
         }
