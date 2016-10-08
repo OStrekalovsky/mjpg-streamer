@@ -26,8 +26,6 @@ public class AsyncRequest {
 
     public AsyncRequest(AsyncContext context) throws IOException {
         this.context = context;
-        // set fake lastResponseTime on request creation to handle timeout if no
-        // data was send before timeout expired
         this.out = this.getContext().getResponse().getOutputStream();
         this.context.addListener(new AsyncListener() {
 

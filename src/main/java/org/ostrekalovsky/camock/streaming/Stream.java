@@ -15,10 +15,8 @@ public class Stream {
 
     private static final String MULTIPART_BOUNDARY = "JPEG_FRAME_BOUNDARY";
     private volatile Camera camera = null;
-    private final ImageRepository repository;
 
     public Stream(String imageId, int rotation, int maxFPS, HttpServletRequest req, HttpServletResponse response, ImageRepository repository) throws IOException {
-        this.repository = repository;
         AsyncContext context = req.startAsync();
         context.setTimeout(0);
         response.setHeader("Access-Control-Allow-Origin", "*");
