@@ -1,12 +1,11 @@
 package org.ostrekalovsky.camock.streaming;
 
-import org.ostrekalovsky.camock.ImageRepository;
-
 import javax.servlet.AsyncContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Iterator;
 
 /**
  * Created by Oleg Strekalovsky on 23.08.2016.
@@ -16,7 +15,7 @@ public class Stream {
     private static final String MULTIPART_BOUNDARY = "JPEG_FRAME_BOUNDARY";
     private volatile Camera camera = null;
 
-    public Stream(String imageId, int rotation, int maxFPS, HttpServletRequest req, HttpServletResponse response, ImageRepository repository) throws IOException {
+    public Stream(String imageId, int rotation, int maxFPS, HttpServletRequest req, HttpServletResponse response, Iterator<byte[]> content) throws IOException {
         AsyncContext context = req.startAsync();
         context.setTimeout(0);
         response.setHeader("Access-Control-Allow-Origin", "*");
@@ -24,7 +23,7 @@ public class Stream {
         response.setHeader("Connection", "keep-alive");
         AsyncRequest asyncRequest = new AsyncRequest(context);
 
-        camera = Camera.getCameraInstance(repository, imageId, rotation / 90,maxFPS, (frame) -> {
+        camera = Camera.getCameraInstance(content, imageId, rotation / 90, maxFPS, (frame) -> {
             try {
                 // camera.setRotation((this.rotation += 90) % 360);
                 System.out.println("frame size:" + frame.length);
@@ -54,17 +53,6 @@ public class Stream {
 
     }
 
-    public void setImageId(String imageId) {
-        camera.setImage(imageId);
-    }
-
-    public void setMaxFPS(int fps) {
-        camera.setMaxFps(fps);
-    }
-
-    public void setRotation(int rotation) {
-        camera.setRotation(rotation);
-    }
 
     private byte[] buildMJPEGFrame(byte[] currentFrame) {
         byte[] p1 = ("--" + MULTIPART_BOUNDARY + "\r\n" + "Content-Type: image/jpeg" + "\r\n" + "Content-Length: "

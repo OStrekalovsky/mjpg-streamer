@@ -3,18 +3,30 @@ package org.ostrekalovsky.camock;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
  * Created by Oleg Strekalovsky on 22.08.2016.
  */
-public class ImageRepository {
+public class ImageRepository implements DataSource {
 
     public static final Pattern pattern = Pattern.compile("[A-Za-z0-9\\-_\\.]+\\.(jpeg|jpg)");
+
+    @Override
+    public Optional<Iterator<byte[]>> getResource(String id, int rotation) {
+        return Optional.ofNullable(getImageWithRotation(id, rotation)).map(data -> new Iterator<byte[]>() {
+            @Override
+            public boolean hasNext() {
+                return true;
+            }
+
+            @Override
+            public byte[] next() {
+                return data;
+            }
+        });
+    }
 
     public static class ImageInfo {
         private final String id;

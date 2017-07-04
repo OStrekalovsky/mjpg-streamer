@@ -16,10 +16,11 @@ public class CamockServlet extends HttpServlet {
 
     private final String dbPath;
     Streamer streamer = new Streamer();
+    private final ImageCollectionRepository collectionRepository;
 
-    public CamockServlet(String dbPath) {
-
+    public CamockServlet(String dbPath) throws IOException {
         this.dbPath = dbPath;
+        collectionRepository = new ImageCollectionRepository(dbPath);
     }
 
     @Override
@@ -34,13 +35,13 @@ public class CamockServlet extends HttpServlet {
         } else if (context.startsWith("/mjpeg")) {
             String imageName = context.substring("/mjpeg/".length());
             System.out.println("imageName = " + imageName);
-            getStream(req, resp, imageName, repository);
+            getStream(req, resp, imageName, repository, collectionRepository);
         } else {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND);
         }
     }
 
-    private void getStream(HttpServletRequest req, HttpServletResponse resp, String imageId, ImageRepository repository) throws IOException {
+    private void getStream(HttpServletRequest req, HttpServletResponse resp, String imageId, ImageRepository repository, ImageCollectionRepository collectionRepository) throws IOException {
         String rotationSt = req.getParameter("rotation");
         int rotation = 0;
         if (rotationSt != null && !rotationSt.isEmpty()) {
@@ -51,7 +52,7 @@ public class CamockServlet extends HttpServlet {
             }
         }
         try {
-            streamer.newStreamOf(imageId, rotation, req, resp, repository);
+            streamer.newStreamOf(imageId, rotation, req, resp, repository, collectionRepository);
         } catch (IllegalArgumentException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST);
         }
@@ -73,6 +74,7 @@ public class CamockServlet extends HttpServlet {
         PrintWriter writer = resp.getWriter();
         writer.print("<html><body>");
         writer.print("<center>DB content. Files pattern:" + repository.getPattern() + "</center>");
+        writer.print("<h1>Single images</h1>");
         writer.print("<table border=\"1\">");
         writer.print("<th>Picture</th><th>Download JPEG URL</th><th>MJPEG Stream URL</th><th>Content</th>");
         for (ImageRepository.ImageInfo info : repository.getImages()) {
@@ -97,6 +99,18 @@ public class CamockServlet extends HttpServlet {
             writer.print("</tr>");
         }
         writer.print("</table>");
+        writer.print("<h1>Collections of images</h1>");
+        writer.print("<table border=\"1\">");
+        writer.print("<th>Name</th><th>MJPEG Stream URL</th><th>Content</th>");
+        for (ImageCollectionRepository.FolderInfo folder : collectionRepository.getCollection()) {
+            writer.print("<tr>");
+            writer.print("<td>" + folder.getId() + "</td>");
+            writer.print("<td>" + buildMJPEGStreamUrl(urlPrefix, folder.getId()) + "</td>");
+            writer.print("<td>Files in folder: " + folder.getSize() + "</td>");
+            writer.print("</tr>");
+        }
+
+        writer.print("<table>");
         writer.print("</body></html>");
     }
 
