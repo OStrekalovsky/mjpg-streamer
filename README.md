@@ -2,11 +2,11 @@
 
 MJPEG Streamer of jpeg images.
 
-#Build
+# Build
 
 mvn clean package
 
-#Running
+# Running
 
 java -jar mjpeg-streamer-<version>-jar-with-dependencies.jar `<directory with images>`
 
@@ -14,7 +14,7 @@ For every folder in `<directory with images>` can create ordered (by file name o
 
 Instantiates Jetty Embedded server on port 8080 with application context "camock"
 
-#Usage
+# Usage
 
 * `/camock/` - show dbs
 * `/camock/view/<image id>` - download image by id
