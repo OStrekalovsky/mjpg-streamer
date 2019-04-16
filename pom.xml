@@ -4,7 +4,7 @@
 
     <groupId>org.ostrekalovsky</groupId>
     <artifactId>mjpeg-streamer</artifactId>
-    <version>1.1</version>
+    <version>1.1.1</version>
     <packaging>jar</packaging>
 
     <name>mjpeg-streamer</name>
@@ -12,7 +12,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <version.jetty>9.3.9.v20160517</version.jetty>
+        <version.jetty>9.4.15.v20190215</version.jetty>
     </properties>
 
     <dependencies>
