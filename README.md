@@ -2,11 +2,11 @@
 
 MJPEG Streamer of jpeg images.
 
-#Build
+# Build
 
 mvn clean package
 
-#Running
+# Running
 
 java -jar mjpeg-streamer-<version>-jar-with-dependencies.jar `<directory with images>`
 
@@ -14,10 +14,10 @@ For every folder in `<directory with images>` can create ordered (by file name o
 
 Instantiates Jetty Embedded server on port 8080 with application context "camock"
 
-#Usage
+# Usage
 
-* `/` - show dbs
-* `/view/<image id>` - download image by id
-* `/mjpeg/<image id>` - get MJPEG stream of selected image. Optional query parameters:
+* `/camock/` - show dbs
+* `/camock/view/<image id>` - download image by id
+* `/camock/mjpeg/<image id>` - get MJPEG stream of selected image. Optional query parameters:
     * `maxFPS=<integer>` - set stream's FPS
     * `rotation=<rotaion angle of [0,90,180,270]>` - set image's rotation
